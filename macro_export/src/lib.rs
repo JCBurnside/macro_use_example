@@ -30,11 +30,22 @@ pub fn format(_meta: TokenStream, input: TokenStream) -> TokenStream {
             .to_compile_error()
             .into();
     }
-
     if let Some(err) = bool_error {
         return err.to_compile_error().into();
     }
-
+    let arg_name = inputs.first().unwrap();
+    let arg_name = match arg_name {
+        FnArg::Typed(pat) => 
+        {
+            match pat.pat.as_ref() {
+                Pat::Ident(i) =>{
+                    i.ident.to_string()
+                },
+                _ => String::new()
+            }
+        },
+        _ => String::new()
+    };
     let vis = &input_fn.vis;
     let body = &input_fn.block;
     let custom_t_name = ident.to_string() + "_t";
@@ -44,7 +55,7 @@ pub fn format(_meta: TokenStream, input: TokenStream) -> TokenStream {
         impl macro_support::CustomTrait for #custom_t_name
         {
             const NAME : &'static str = "#ident";
-            fn is_valid(&self,:&str) -> bool {
+            fn is_valid(&self,#arg_name:&str) -> bool {
                 #body
             }
         }
@@ -53,7 +64,7 @@ pub fn format(_meta: TokenStream, input: TokenStream) -> TokenStream {
 
         impl ToString for #custom_t_name {
             fn to_string(&self) -> String {
-                concat!("format: ", <Self as CustomValidator>::NAME).to_string()
+                format!("format: ", <Self as macro_support::CustomTrait>::NAME).to_string()
             }
         }
     })

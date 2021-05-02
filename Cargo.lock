@@ -16,6 +16,7 @@ name = "macro_sample"
 version = "0.1.0"
 dependencies = [
  "macro_export",
+ "macro_support",
 ]
 
 [[package]]
