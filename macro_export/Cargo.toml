@@ -1,0 +1,11 @@
+[package]
+name = "macro_export"
+version = "0.0.1"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+macro_support = { path = "../macro_support" }
+syn = {version="1.0.71",features=["full"]}
+quote = "1.0.9"
