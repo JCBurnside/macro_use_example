@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 macro_export = { path = "../macro_export" }
+macro_support = { path = "../macro_support" }
